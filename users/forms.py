@@ -7,8 +7,8 @@ class SignupForm(forms.Form):
     password = forms.CharField(max_length=70, required=True, widget=forms.PasswordInput())
     password_confirmation = forms.CharField(max_length=70, required=True, widget=forms.PasswordInput())
     
-    first_name = forms.CharField(min_length=2,max_length=50)
-    last_name = forms.CharField(min_length=2,max_length=50)
+    first_name = forms.CharField(min_length=2, max_length=50)
+    last_name = forms.CharField(min_length=2, max_length=50)
 
     email = forms.CharField(min_length=6, max_length=70, widget=forms.EmailInput())
     
@@ -29,21 +29,12 @@ class SignupForm(forms.Form):
 
         if password != password_confirmation:
             raise forms.ValidationError('Password do not match')
-
         return data
     
 
-    def save(self):
-        
+    def save(self):   
         data = self.cleaned_data
-        print(data['password_confirmation'])
         data.pop('password_confirmation')
         user = User.objects.create_user(**data)
         profile = Profile(user=user)
         profile.save()
-
-class ProfileForm(forms.Form):
-    website = forms.URLField(max_length=200, required = False)
-    biography = forms.CharField(max_length=500, required=True)
-    phone_number = forms.CharField(max_length=20, required=False)
-    picture = forms.ImageField(required=False)
